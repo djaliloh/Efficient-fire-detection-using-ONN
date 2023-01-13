@@ -8,9 +8,6 @@ import torch.nn.init as init
 # warnings
 import warnings
 warnings.filterwarnings('ignore', category=FutureWarning)
-# Data science tools
-import numpy as np
-from selfonnqu import SelfONNLayer
 from SelfONN import SelfONN2d
 
 # channel attention module
@@ -83,10 +80,9 @@ def Selfire(input_ch, class_num, q_order):
         torch.nn.Tanh(),
         torch.nn.MaxPool2d(kernel_size=2, stride=2), 
 
-        # 8th layer (conv)
-        SelfONN2d(in_channels=512,out_channels=512,kernel_size=2,stride=1,q=q_order,mode='fast'),
-        torch.nn.Tanh(),
-        # torch.nn.MaxPool2d(kernel_size=2, stride=2),
+        # channel attention 
+        SELFCAM(inchannels=512, q_order=q_order),
+    
 
         # Classification layers       
         # flatten 
