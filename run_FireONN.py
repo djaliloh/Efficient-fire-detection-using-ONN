@@ -5,7 +5,7 @@ import torch.nn as nn
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import torchvision.transforms as T
-from model import SelfONN_1, FireDetectionCNN, SelfONN_4, Selfire, FDnet, weights_init
+from model import Selfire
 from loader import *
 from tqdm import tqdm
 from torchsummary import summary
@@ -26,67 +26,20 @@ lr = 0.0001
 n_epochs = 10
 
 
-
 # verify if CUDA is available 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 
-# def collate_fn(batch):
-#     images = []
-#     labels = []
-#     #a, b = batch[0][0].shape[-2:]
-#     resize_func = T.Resize(size=(224,224))
-#     #resize_func = T.Resize(size=(int(b * 0.8), int(a * 0.8)))
-#     to_tensor = T.ToTensor()
-#     to_pil = T.ToPILImage()
-
-#     for img, lab in batch:
-#         labels.append(lab)
-#         images.append(to_tensor(resize_func(to_pil(img))))
-#     images = torch.stack(images)
-#     labels = torch.stack(labels)
-#     return images, labels
-# transformer
 transform = transforms.Compose([transforms.Resize((224, 224)),  transforms.ToTensor()])
 
 
 ################################## print model summary ################################## 
-# modelcnn = FireDetectionCNN(input_size=(3, 256, 256), num_classes=2)
-# summary(modelcnn.to(device), (3, 256, 256))
-
-# net = FDnet(3, 2, block_config=(4, 6, 8, 10)) # the original
-# net.apply(weights_init)
-# summary(net.to(device), (3, 224, 224))
-# exit(0)
 
 onnmodel = Selfire(inputchanel, classnum, qorder)
 summary(Selfire(inputchanel, classnum, qorder).to(device), (3, 224, 224))
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(onnmodel.parameters(), lr=lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.0001, amsgrad=False) 
-# if optim_fc == 'Adam':  
-#     optimizer = optim.Adam(onnmodel.parameters(), lr=lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.0001, amsgrad=False) 
-# elif optim_fc == 'SGD': 
-#     optimizer = optim.SGD(onnmodel.parameters(), lr=lr, momentum=0.9, dampening=0, weight_decay=0.0001, nesterov=False)  
-
-
-# for m in onnmodel.children():
-#     # print(m)
-#     # exit()
-#     output = m(output)
-#     print("Heeerrrreee", m, output.shape)
-
-# see where error occure in the network
-# def print_sizes(model, input_tensor=[224]):
-#     output = input_tensor
-#     for m in model.children():
-#         output = m(output)
-#         print(m, output.shape)
-#     return output
-
-# print_sizes(onnmodel)
-
-
 
 
 class AverageMeter(object):
@@ -117,10 +70,9 @@ def run_epoch(model, train_dataloader, val_dataloader, criterion, optimizer):
 
     # Loop over the training data
     for X_batch, y_batch in train_dataloader:
-        # X_batch = X_batch.permute(0,3,1,2) # for CNN
-        # X_batch = X_batch.permute(0,2,3,1) # for CNN
-        # print(X_batch.shape)
-
+        # X_batch = X_batch.permute(0,3,1,2) 
+        # X_batch = X_batch.permute(0,2,3,1) 
+    
         # Forward pass
         X_batch = X_batch.to(device) 
         y_batch = y_batch.to(device)
@@ -135,7 +87,7 @@ def run_epoch(model, train_dataloader, val_dataloader, criterion, optimizer):
         loss = criterion(y_pred, y_batch).to(device)
         loss.backward()
         optimizer.step()
-        # print(y_batch.shape, y_pred.shape)
+        
         # print(y_batch == y_pred.argmax(dim=1))
         acc = (y_batch == y_pred.argmax(dim=1)).float().sum() / len(y_batch)
         train_metrics.update(acc)
@@ -194,7 +146,7 @@ def test_loop(model, dataloader):
 models = []
 
 test_dataset = FireDataset(os.path.join(datainit, "test"), transform=transform)
-# load the data
+# load the test data
 test_dataloader = DataLoader(test_dataset, batch_size=32, shuffle=True)
 
 for fold in range(k):
@@ -204,14 +156,14 @@ for fold in range(k):
     optimizer = optim.Adam(model.parameters(), lr=lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.0001, amsgrad=False) 
 
     for epoch in tqdm(range(n_epochs)):
-        # print(os.path.join(dataworkdir, str(fold), "train"))
-        # Create the dataset
+        
+        # Create train dataset
         train_dataset = FireDataset(os.path.join(dataworkdir, str(fold), "train"), transform=transform)
-        # load the data
+        # load train data
         train_dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 
         val_dataset = FireDataset(os.path.join(dataworkdir, str(fold), "test"), transform=transform)
-        # load the data
+        # load val data
         val_dataloader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
         train_acc, val_acc = run_epoch(model,train_dataloader=train_dataloader, val_dataloader=val_dataloader, criterion=criterion, optimizer=optimizer)
