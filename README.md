@@ -14,7 +14,7 @@ This repository contains scripts for training and testing a fire classification 
     Download the dataset and extract it to the root directory of the project.
     Run the following command to train the model:
     python run_ONN_fire.py     
-    <!-- --data-dir path/to/dataset --model-dir path/to/save/model -->
+<!-- --data-dir path/to/dataset --model-dir path/to/save/model -->
 The model will be saved in the specified directory after training is complete.
 
 ## Testing
@@ -33,9 +33,9 @@ This will produce an accuracy score of the model on the test dataset.
     The provided scripts are for demonstration purposes and may need to be modified to suit your specific use case
 
 # References
-    <!-- paper1
-    paper2
-    paper3 -->
+<!-- paper1
+paper2
+paper3 -->
 
 Please cite our paper if you use this code.
 Please let me know if you have any question or concern.
