@@ -1,6 +1,8 @@
 # Fire Classification using Operational Neural Network (ONN)
-This repository contains scripts for training and testing a fire classification model using an Operational Neural Network (ONN). The model is able to detect fires in images with high accuracy compared to state-of-the-art methods.
+This repository contains scripts for training and testing a fire classification model using an Operational Neural Network (ONN**). The model is able to detect fires in images with high accuracy compared to state-of-the-art methods.
 <!-- "We utilized an Operational Neural Network (ONN) to successfully detect fires, which has proven to be more effective than other state-of-the-art methods. The ONN is a convolutional neural network with a reduced number of parameters, providing a balance of complexity and efficiency."  -->
+
+** : http://selfonn.net/
 
 # Requirements
     Python 3.6 or later
@@ -8,12 +10,13 @@ This repository contains scripts for training and testing a fire classification 
     NumPy
     Matplotlib (for visualization)
     [Dataset](http://www.nnmtl.cn/EFDNet/)
+    ONN github link: https://github.com/junaidmalik09/fastonn
 
 # Usage
 ## Training
     Download the dataset and extract it to the root directory of the project.
     Run the following command to train the model:
-        
+
     python run_ONN_fire.py     
 <!-- --data-dir path/to/dataset --model-dir path/to/save/model -->
 The model will be saved in the specified directory after training is complete.
