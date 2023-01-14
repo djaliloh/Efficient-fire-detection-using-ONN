@@ -6,7 +6,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 import torchvision.transforms as T
 from model import Selfire
-from loader import *
+from data_process import *
 from tqdm import tqdm
 from torchsummary import summary
 from model_utils import average
@@ -33,7 +33,7 @@ print(device)
 transform = transforms.Compose([transforms.Resize((224, 224)),  transforms.ToTensor()])
 
 
-################################## print model summary ################################## 
+########## print model summary ##########
 
 onnmodel = Selfire(inputchanel, classnum, qorder)
 summary(Selfire(inputchanel, classnum, qorder).to(device), (3, 224, 224))
@@ -70,32 +70,26 @@ def run_epoch(model, train_dataloader, val_dataloader, criterion, optimizer):
 
     # Loop over the training data
     for X_batch, y_batch in train_dataloader:
-        # X_batch = X_batch.permute(0,3,1,2) 
-        # X_batch = X_batch.permute(0,2,3,1) 
-    
+
         # Forward pass
         X_batch = X_batch.to(device) 
         y_batch = y_batch.to(device)
-        # print(X_batch.shape)
 
         # zero the parameter gradients
         optimizer.zero_grad()
         y_pred = model(X_batch)
 
-        # print(y_batch.shape)
         # Compute the loss
         loss = criterion(y_pred, y_batch).to(device)
+        # Backward pass
         loss.backward()
+        # Update the weights
         optimizer.step()
         
         # print(y_batch == y_pred.argmax(dim=1))
         acc = (y_batch == y_pred.argmax(dim=1)).float().sum() / len(y_batch)
         train_metrics.update(acc)
-        # Backward pass
-        # loss.backward()
-
-        # Update the weights
-        # optimizer.step()
+       
 
     # Set the model to eval mode
     with torch.no_grad():
@@ -105,12 +99,11 @@ def run_epoch(model, train_dataloader, val_dataloader, criterion, optimizer):
 
             X_batch = X_batch.to(device) 
             y_batch = y_batch.to(device)
+            
             # Forward pass
             y_pred = model(X_batch)
-
             # Compute the loss
             loss = criterion(y_pred, y_batch).to(device)
-
             # Update the evaluation metrics
             correct_val = (y_batch == y_pred.argmax(dim=1)).float().sum()
             eval_metrics.update(correct_val / len(y_batch))

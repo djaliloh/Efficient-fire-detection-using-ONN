@@ -6,7 +6,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 import torchvision.transforms as T
 from model import SelfONN_1, FireDetectionCNN, SelfONN_4, Selfire
-from loader import *
+from data_process import *
 from tqdm import tqdm
 from torchsummary import summary
 from copy import deepcopy

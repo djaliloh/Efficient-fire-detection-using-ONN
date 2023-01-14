@@ -1,6 +1,4 @@
 # Efficient-fire-detection-using-ONN
-To perform this Fire detection task, we have
-used an Operational Neural Network (ONN) that gives us good results compared to the
-state-of-the-art methods. The ONN is a new type of convolutional neural network that
-significantly reduces the number of parameters, making it a good trade-off between
-model complexity and efficiency.
+"We utilized an Operational Neural Network (ONN) to successfully detect fires, which has proven to be more effective than other state-of-the-art methods. The ONN is a convolutional neural network with a reduced number of parameters, providing a balance of complexity and efficiency."
+
+# Step to run the model

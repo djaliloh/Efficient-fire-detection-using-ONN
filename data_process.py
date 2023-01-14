@@ -9,13 +9,6 @@ import glob
 import numpy as np
 
 
-# firepath = datapath+"/fire"
-# nonfirepath = datapath+"/nonfire"
-
-
-# print(dfdata.head())
-# print("##### the rest ##### ")
-# print(data.tail())
 etiquette = {"fire":0, "nonfire":1}
 
 def create_folder(fold):
@@ -37,10 +30,6 @@ def crossval(datasourced, dataworkd, k=5, first_split=False):
     images=glob.glob(datasourced +"/*/*")
     labels=[]
 
-    # count_fire = len(os.listdir(firepath))
-    # count_nofire = len(os.listdir(nonfirepath))
-
-
     for file in images:
         clss = file.split("\\")[1]
         labels.append(clss)
@@ -61,7 +50,7 @@ def crossval(datasourced, dataworkd, k=5, first_split=False):
     print(splitdf)
 
     # grouped kfold into train and test folders respectively
-    # split them into 80-10 respectively if does not want cross val
+    # split them into 80-20 respectively if does not want cross val
     if first_split:
         cv = CrossValidation(dfdata, shuffle=True, target_cols=["Label"], num_folds=5)
         splitdf = cv.split()

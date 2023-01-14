@@ -1,4 +1,4 @@
-from loader import crossval
+from data_process import crossval
 
 src_fold = "./datasource"
 init_fold = "./data_init"
