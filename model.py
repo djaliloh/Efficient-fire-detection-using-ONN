@@ -8,7 +8,7 @@ import torch.nn.init as init
 # warnings
 import warnings
 warnings.filterwarnings('ignore', category=FutureWarning)
-from SelfONN import SelfONN2d
+from fastONN.SelfONN import SelfONN2d
 
 # channel attention module
 class SELFCAM(nn.Module):

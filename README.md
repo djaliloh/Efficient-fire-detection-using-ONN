@@ -5,13 +5,14 @@ This repository contains scripts for training and testing a fire classification 
 ** : http://selfonn.net/
 
 # Requirements
-    Python 3.6 or later
-    PyTorch 2.x
-    NumPy
     Matplotlib (for visualization)
-    [Dataset](http://www.nnmtl.cn/EFDNet/)
+    Numpy 1.23.5
     ONN github link: https://github.com/junaidmalik09/fastonn
-
+    Pandas 1.2.4
+    Python 3.6 or later
+    PyTorch 1.9.1
+    Scikit-learn 1.0.2
+    [Dataset](http://www.nnmtl.cn/EFDNet/)
 # Usage
 ## Training
     Download the dataset and extract it to the root directory of the project.

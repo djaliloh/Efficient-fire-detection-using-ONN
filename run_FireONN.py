@@ -10,7 +10,6 @@ from data_process import *
 from tqdm import tqdm
 from torchsummary import summary
 from model_utils import average
-
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -99,7 +98,7 @@ def run_epoch(model, train_dataloader, val_dataloader, criterion, optimizer):
 
             X_batch = X_batch.to(device) 
             y_batch = y_batch.to(device)
-            
+
             # Forward pass
             y_pred = model(X_batch)
             # Compute the loss
